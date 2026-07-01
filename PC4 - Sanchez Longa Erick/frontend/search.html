@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscador Mock</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">MascotasApp</a>
+            <a class="nav-link text-white" href="index.html">Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card mx-auto" style="max-width: 500px;">
+            <div class="card-body">
+                <h3 class="card-title text-center">Búsqueda Inteligente (Simulada)</h3>
+                <form id="searchForm" class="mt-4">
+                    <input type="file" id="image" class="form-control mb-3" required>
+                    <select id="searchType" class="form-select mb-3">
+                        <option value="Adopción">Adopción</option>
+                        <option value="Venta">Venta</option>
+                        <option value="Verificar Pérdida">Verificar Pérdida</option>
+                    </select>
+                    <button type="submit" class="btn btn-warning w-100">Procesar Imagen</button>
+                </form>
+
+                <div id="resultArea" class="mt-4 alert alert-info d-none">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById("image");
+            const searchType = document.getElementById("searchType").value;
+            
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("search_type", searchType);
+
+            const res = await fetch("http://localhost:8000/search/", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            const resultArea = document.getElementById("resultArea");
+            resultArea.classList.remove("d-none");
+            resultArea.innerHTML = `
+                <h5>${data.message}</h5>
+                <p><strong>Tipo:</strong> ${data.search_type}</p>
+                <hr>
+                <p><strong>Match:</strong> ${data.results[0].match_percentage}</p>
+                <p><small>${data.results[0].mock_note}</small></p>
+            `;
+        });
+    </script>
+</body>
+</html>
