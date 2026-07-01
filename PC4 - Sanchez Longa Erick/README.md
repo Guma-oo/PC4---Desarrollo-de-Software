@@ -1,4 +1,4 @@
-#Sistema de Búsqueda de Mascotas
+# Sistema de Búsqueda de Mascotas
 
 Utilice una arquitectura por capas: **Backend (API REST)** y **Frontend (Interfaz de Usuario)**.
 
